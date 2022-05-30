@@ -1,32 +1,28 @@
-FROM python:3.9-alpine3.13
-LABEL maintainer="t.me/digitalkaleb"
+FROM python:3.9-alpine
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED = 1
+ENV DONTWRITEBYTECODE = 1
 
-COPY ./requirements.txt /requirements.txt
-COPY ./marketplace /marketplace
-COPY ./backend-scripts /backend-scripts
+COPY ./requirements.dev.txt /tmp/requirements.dev.txt
+COPY ./requirements.txt /tmp/requirements.txt
+COPY ./test_django_deploy /test_django_deploy
 
-WORKDIR /backend
-
+WORKDIR /test_django_deploy
 EXPOSE 8000
 
-RUN python -m venv /py && \
-    /py/bin/pip install --upgrade pip && \
-    apk add --update --no-cache postgresql-client && \
-    apk add --update --no-cache --virtual .tmp-deps \
-        build-base postgresql-dev musl-dev linux-headers && \
-    /py/bin/pip install -r /requirements.txt && \
-    apk del .tmp-deps && \
-    adduser --disabled-password --no-create-home app && \
-    mkdir -p /vol/web/static && \
-    mkdir -p /vol/web/media && \
-    chown -R app:app /vol && \
-    chmod -R 755 /vol && \
-    chmod -R +x /backend-scripts
+# по умолчанию мы не запущены в development-режиме, но если запущены в нем, то
+# устанавливать так же будут необходимые библиотеки (flake8) из requirements.dev.txt
+ARG DEV=false
 
-ENV PATH="/backend-scripts:/py/bin:$PATH"
-USER app
+RUN python -m venv .venv && \
+    /.venv/bin/pip install --upgrade pip && \
+    /.venv/bin/pip install -r /tmp/requirements.txt && \
+    if [$DEV = "true"]; \
+      then /.venv/bin/pip install -r /tmp/requirements.dev.txt; \
+    fi && \
+    rm -rf /tmp && \
+    useradd django
 
-CMD ["run.sh"]
+ENV PATH="/.venv/bin:$PATH"
+
+USER django
