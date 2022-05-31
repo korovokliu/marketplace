@@ -5,9 +5,9 @@ ENV DONTWRITEBYTECODE = 1
 
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./requirements.txt /tmp/requirements.txt
-COPY ./test_django_deploy /test_django_deploy
+COPY ./marketplace /marketplace
 
-WORKDIR /test_django_deploy
+WORKDIR /marketplace
 EXPOSE 8000
 
 # по умолчанию мы не запущены в development-режиме, но если запущены в нем, то
