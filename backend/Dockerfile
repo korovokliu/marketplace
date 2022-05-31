@@ -14,14 +14,18 @@ EXPOSE 8000
 # устанавливать так же будут необходимые библиотеки (flake8) из requirements.dev.txt
 ARG DEV=false
 
-RUN python -m venv .venv && \
+RUN python -m venv /.venv && \
     /.venv/bin/pip install --upgrade pip && \
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-deps \
+        build-base postgresql-dev musl-dev linux-headers && \
     /.venv/bin/pip install -r /tmp/requirements.txt && \
     if [$DEV = "true"]; \
       then /.venv/bin/pip install -r /tmp/requirements.dev.txt; \
     fi && \
+    apk del .tmp-deps && \
     rm -rf /tmp && \
-    useradd django
+    adduser --disabled-password --no-create-home django
 
 ENV PATH="/.venv/bin:$PATH"
 

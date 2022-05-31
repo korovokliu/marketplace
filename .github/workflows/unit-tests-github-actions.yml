@@ -15,6 +15,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3 # pre-made action от самого GitHub, который проверяет код в репозитории на доступность для виртуального окружения GitHub Actions
       - name: Test
-        run: docker-compose -f docker-compose-dev.yml run --rm app sh -c "python manage.py test"
+        run: docker-compose -f ../backend/docker-compose-dev.yml run --rm app sh -c "python manage.py test"
       - name: Lint
-        run: docker-compose -f docker-compose-dev.yml run --rm app sh -c "flake8
+        run: docker-compose -f ../backend/docker-compose-dev.yml run --rm app sh -c "flake8"
