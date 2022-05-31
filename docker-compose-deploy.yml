@@ -1,0 +1,60 @@
+version: "3.3"
+
+services:
+  backend:
+    build:
+      context: .
+    restart: always
+    volumes:
+      - static-data:/vol/web
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - DEBUG=${DEBUG}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+
+  proxy:
+    build:
+      context: ./proxy
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:8000"
+#      - "443:443"
+    volumes:
+      - static-data:/vol/static
+#      - ./data/certbot/conf:/etc/letsencrypt # ./data/certbot/conf:/etc/letsencrypt
+#      - ./data/certbot/www:/var/www/certbot
+
+#  certbot:
+#    image: certbot/certbot
+#    restart: unless-stopped
+#    depends_on:
+#      - proxy
+#    volumes:
+#      - ./data/certbot/conf:/etc/letsencrypt
+#      - ./data/certbot/www:/var/www/certbot
+#    command: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+#    #command: certonly --webroot --webroot-path=/var/www/certbot \
+#    #        --email korovokliu@gmail.com --agree-tos --no-eff-email \
+#    #        -d kaztechdrive.online
+
+volumes:
+  postgres-data:
+  static-data:
