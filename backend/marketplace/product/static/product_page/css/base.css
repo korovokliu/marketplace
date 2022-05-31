@@ -1,0 +1,29 @@
+* {
+    color: rebeccapurple;
+    font-weight: bold;
+    font-family: Verdana, sans-serif;
+}
+
+a.interact_product {
+    padding: 10px;
+    background-color: greenyellow;
+    border: 1px solid black;
+    margin: 3px;
+    border-radius: 5px;
+}
+
+.mycontent {
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 1px;
+    display: inline-block;
+}
+
+.mycontent:hover {
+    box-shadow: #00363a 2px 1px;
+}
+
+img {
+    width: 300px;
+    display: inline-block;
+}

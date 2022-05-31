@@ -1,0 +1,54 @@
+{% extends "product_page/base.html" %}
+
+
+{% block title_product %}Страница товара{% endblock %}
+
+
+{% block content %}
+    {{product.title }}<br>
+    <img src="{{ product.image.url }}">
+<div class="count">{{order.quantity}}</div><br>
+<button class="interact_product" data-id="{{ product.id }}" data-action="add">Добавить</button>
+    <span class="count">0</span>
+<button class="interact_product" data-id="{{ product.id }}" data-action="delete">Удалить</button>
+{% endblock %}
+
+{% block domready %}
+var url = 'http://127.0.0.1:8000{% url "products:individual_product" slug=product.slug %}';
+var options = {
+  method: 'POST',
+  headers: {'X-CSRFToken': csrftoken},
+  mode: 'same-origin'
+}
+
+document.querySelectorAll('button.interact_product').forEach(function(button) {
+  button.addEventListener('click', function(e){
+    e.preventDefault(); // убираем дефолтное поведение элемента a - переход по ссылке
+    var busketAdd = this; // button Object
+    console.log(`busketAdd: ${busketAdd}`)
+    console.log(`busketAdd.dataset: ${busketAdd.dataset.action}`)
+
+    // добавить тело запроса
+    var formData = new FormData();
+    formData.append('id', busketAdd.dataset.id);
+    formData.append('action', busketAdd.dataset.action);
+    console.log(`formData = ${formData}`)
+    options['body'] = formData;
+
+  // отправить HTTP-запрос
+    fetch(url, options).then(response => response.json()).then(data => {
+        if (data['status'] === 'ok')
+        {
+        // обновить количество товаров в корзине
+        var productCount = document.querySelector('span.count');
+        console.log(`productCount: ${productCount}`)
+        var totalProducts = parseInt(productCount.innerHTML);
+        if (busketAdd.dataset.action == 'add') {
+            productCount.innerHTML = totalProducts + 1; }
+        else if (busketAdd.dataset.action == 'delete') {
+            productCount.innerHTML = totalProducts - 1; }
+        }
+    })
+    })
+})
+{% endblock %}

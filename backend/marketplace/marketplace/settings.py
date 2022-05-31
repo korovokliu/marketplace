@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR.parent / ".env")
+load_dotenv(BASE_DIR.parent.parent / ".env")  # BASE_DIR.parent.parent: C:\Users\Acer\Desktop\random_folder\marketplace
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'product'
+    'product',
+    'order'
 ]
 
 MIDDLEWARE = [

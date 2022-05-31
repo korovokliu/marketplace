@@ -2,3 +2,8 @@
 .venv
 .env
 .git
+**/migrations/__pycache__
+# из-за конфликтов миграций, я буду добавлять только __init__.py, все остальные
+# (по типу 0001_initial.py и т.п.) добавляться не будут
+**/migrations
+!**/migrations/__init__.py
