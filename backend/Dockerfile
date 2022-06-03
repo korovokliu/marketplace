@@ -1,7 +1,7 @@
 FROM python:3.9-alpine
 
-ENV PYTHONUNBUFFERED = 1
-ENV DONTWRITEBYTECODE = 1
+ENV PYTHONUNBUFFERED 1
+ENV DONTWRITEBYTECODE 1
 
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./requirements.txt /tmp/requirements.txt
@@ -20,8 +20,8 @@ RUN python -m venv /.venv && \
     apk add --update --no-cache --virtual .tmp-deps \
         build-base postgresql-dev musl-dev linux-headers && \
     /.venv/bin/pip install -r /tmp/requirements.txt && \
-    if [$DEV = "true"]; \
-      then /.venv/bin/pip install -r /tmp/requirements.dev.txt; \
+    if [ $DEV = "true" ] ; \
+    then /.venv/bin/pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     apk del .tmp-deps && \
     rm -rf /tmp && \
