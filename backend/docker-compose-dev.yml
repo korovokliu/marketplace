@@ -30,3 +30,10 @@ services:
       - POSTGRES_DB=marketplace
       - POSTGRES_USER=postgres-dev
       - POSTGRES_PASSWORD=1234lolkek
+
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data # путь /var/lib/postgresql/data нужно использовать именно такой, об этом сказано в документации
+
+
+volumes:
+  dev-db-data:
