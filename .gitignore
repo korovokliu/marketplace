@@ -12,6 +12,17 @@ backend/marketplace/order/__pycache__/
 # из-за конфликтов миграций, я буду добавлять только __init__.py, все остальные
 # (по типу 0001_initial.py и т.п.) добавляться не будут
 
+test.py
+backend.marketplace.product.models-var1.py
+backend.marketplace.product.admin-var1.py
+backend.marketplace.product.models-var1-2
+backend/marketplace/media/
+
+# пока не трекаем миграции
+backend/marketplace/*/migrations/
+!backend/marketplace/*/migrations/__init__.py
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 **/__pycache__

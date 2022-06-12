@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'mptt',
     'core',
     'product',
     'order'
@@ -123,3 +124,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 BUSKET_SESSION_ID = 'busket_session_id'
+
+if DEBUG:
+    import socket  # only if you haven't already imported this
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
+    MIDDLEWARE.insert(0, "silk.middleware.SilkyMiddleware")
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    INSTALLED_APPS += ["silk"]
+    INSTALLED_APPS += ["debug_toolbar"]

@@ -13,7 +13,7 @@ class CommandTests(SimpleTestCase):
         """ Тестирует команду ожидания БД перед полной готовностью """
         patched_check.return_value = True  # проверяем, что команда в принципе может быть вызвана
         call_command('wait_for_db')  # симулирует вызов команды из CLI
-        patched_check.assert_called_once_with(database=['default'])  # после того как бд инициализируется и станет
+        patched_check.assert_called_once_with(databases=['default'])  # после того как бд инициализируется и станет
         # доступной как default бд, эта команда вызовется последний раз - подтвердит доступность и уйдет на покой
 
     @patch('time.sleep')  # имитируем ожидание, перед тем как снова вызвать wait_for_db
@@ -31,5 +31,5 @@ class CommandTests(SimpleTestCase):
         # поставить 10 и 20, ничего не поменяется
         call_command('wait_for_db')
         self.assertEqual(patched_check.call_count, 6)
-        patched_check.assert_called_with(database=['default'])
+        patched_check.assert_called_with(databases=['default'])
 
